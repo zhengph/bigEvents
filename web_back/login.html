@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/iconfont.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="./js/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
@@ -30,7 +31,18 @@
         </div>
 
     </div> 
-
+    <script>
+        $(function(){
+            $('.input_sub').on('click',function(){
+                var username = $('.input_txt').val().trim();
+                var password = $('.input_pass').val().trim();
+                $.ajax({
+                    type: 'post',
+                    url: 'http://localhost:8080/admin/user/login'
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
