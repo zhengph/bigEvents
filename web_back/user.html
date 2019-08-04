@@ -39,7 +39,7 @@
                         <input type="text" name="email" class="form-control email" value="lisisi@126.com">
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
                     <div class="col-sm-10">
@@ -49,13 +49,13 @@
                 </div>
 
                 <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
-                        <div class="col-sm-4">
-                            <input type="password" name="password" class="form-control password" value="12345678">
-                        </div>
+                    <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
+                    <div class="col-sm-4">
+                        <input type="password" name="password" class="form-control password" value="12345678">
                     </div>
-               
-    
+                </div>
+
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success btn-edit">修改</button>
@@ -67,49 +67,62 @@
 
 
     <script>
-        $(function(){
+        $(function () {
             // 图片预览
             // 1.给input:file这个选择图片文件的标签一个change事件.
-            $('#exampleInputFile').on('change',function(){
+            $('#exampleInputFile').on('change', function () {
                 var fileIcon = this.files[0];
                 //生成url
                 var url = URL.createObjectURL(fileIcon);
                 // 添加属性
-                $('.user_pic').attr('src',url);
+                $('.user_pic').attr('src', url);
             })
 
             // 1.一进去个人中心就获取数据显示在页面
             $.ajax({
-                url:'http://localhost:8080/admin/user/detail',
-                success:function(backData){
-                    for(var key in backData.data){
-                        $('input.'+key).val(backData.data[key]);
+                url: 'http://localhost:8080/admin/user/detail',
+                success: function (backData) {
+                    for (var key in backData.data) {
+                        $('input.' + key).val(backData.data[key]);
                     }
-                    $('img.user_pic').attr('src',backData.data.userPic);
+                    $('img.user_pic').attr('src', backData.data.userPic);
                 }
             });
 
             //2.点击修改上传资料，并刷新当前的页面加载到用户处  大事件中用了 iframe标签 注意页面加载问题
-            $('.btn-edit').on('click', function(e){
+            $('.btn-edit').on('click', function (e) {
                 e.preventDefault();
                 //获取数据
                 var fd = new FormData($('form')[0]);
                 $.ajax({
-                    type:'post',
-                    url:'http://localhost:8080/admin/user/edit',
-                    contentType:false,
-                    processData:false,
-                    data:fd,
-                    success:function(backData){
-                        if(backData.code == 200){
+                    type: 'post',
+                    url: 'http://localhost:8080/admin/user/edit',
+                    contentType: false,
+                    processData: false,
+                    data: fd,
+                    success: function (backData) {
+                        if (backData.code == 200) {
                             alert('修改成功');
                             // 加载到用户图标处  //因为用了 iframe标签，可以用parent寻找到父页面
                             parent.window.location.reload();
                         }
-                        
+
+                       //方法二 同时管理人员和图标也相应的改变
+                    //     $.ajax({
+                    //         type: 'get',
+                    //         url: 'http://localhost:8080/admin/user/info',
+                    //         success: function (backData) {
+                    //             if (backData.code == 200) {
+                    //                 parent.$('.user_info>img').attr('src', backData.data.userPic);
+                    //                 parent.$('.user_info>span').html('欢迎&nbsp;&nbsp;' + backData.data.nickname);
+                    //                 parent.$('.user_center_link>img').attr('src', backData.data.userPic);
+                    //             }
+
+                    //         }
+                    //     });
                     }
                 });
-                
+
             });
 
         }); 
